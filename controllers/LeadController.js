@@ -8,6 +8,7 @@ import metaAdsLeadsModel from '../models/metaAdsLeadModel.js';
 import { fetchAllLeads } from '../utils/metaLeadUtils.js';
 // import LeadsModelByExcel from "../models/LeadsModelByExcel.js";
 
+
 // const JWT_SECRET = process.env.JWT_SECRET;
 
 
@@ -40,7 +41,7 @@ export const createLead = async (req, res) => {
 
         const {
             date, name, email, phone, city,
-            budget, requirement, status,
+            budget, requirement, assignedTo, assignedDate, status,
             remarks1, remarks2, source, Campaign,
             ...extraFields
         } = req.body;
@@ -55,11 +56,15 @@ export const createLead = async (req, res) => {
             requirement,
             source,
             Campaign,
+            assignedTo,
+            assignedDate,
             status,
             remarks1,
             remarks2,
             createdById: req.user.id,
             createdBy: req.user.name,
+            assignedTo: assignedTo || null,
+            assignedDate: assignedDate || null,
             ...extraFields // This flattens dynamic fields as top-level fields
         });
 
@@ -115,6 +120,46 @@ export const getAllLeads = async (req, res) => {
   }
 };
 
+
+
+export const updateLead = async (req, res) => {
+    try {
+        const leadId = req.params.id;
+
+        // Extract all updatable fields
+        const {
+            name, email, phone, city,
+            requirement, assignedTo, assignedDate, status
+        } = req.body;
+
+
+        // Build update object
+        const updateData = {
+            ...(name && { name }),
+            ...(email && { email }),
+            ...(phone && { phone }),
+            ...(city && { city }),
+            ...(requirement && { requirement }),
+              assignedTo: assignedTo || null,
+              assignedDate: assignedDate || null,
+            ...(status && { status })
+        };
+
+        const updatedLead = await LeadsModel.findByIdAndUpdate(
+            leadId,
+            { $set: updateData },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedLead) {
+            return res.status(404).json({ message: "Lead not found" });
+        }
+
+        return res.status(200).json({ message: "Lead updated successfully", lead: updatedLead });
+    } catch (error) {
+        return res.status(500).json({ message: "Error updating lead", error: error.message });
+    }
+};
 
 // get leads from meta APIs
 
