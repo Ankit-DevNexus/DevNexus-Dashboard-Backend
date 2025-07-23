@@ -23,6 +23,14 @@ const leadSchema = new mongoose.Schema({
   requirement: {
     type: String
   },
+  assignedTo:{
+    type:String,
+    default: null
+  },
+  assignedDate:{
+    type:Date,
+    default: null
+  },
   status: {
     type: String
   },

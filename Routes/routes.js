@@ -1,7 +1,7 @@
 import express from 'express'
 import { DashboardController } from '../controllers/DashboardController.js';
 import { deleteUser, getAllUsers, login, signup, updateUser } from '../controllers/authUserContoller.js';
-import { createLead, fetchAndSaveNewLeads,  getAdsInsights, getAllLeads, getAllLeadsFromDB, uploadLeadsFromExcel } from '../controllers/LeadController.js';
+import { createLead, fetchAndSaveNewLeads,  getAdsInsights, getAllLeads, getAllLeadsFromDB, updateLead, uploadLeadsFromExcel } from '../controllers/LeadController.js';
 import upload from '../middleware/multerMiddleware.js';
 import { Authenticate, authorize } from '../middleware/authMiddleware.js';
 import { getUserLoginHistory } from '../controllers/UserLoginHistoryController.js';
@@ -32,9 +32,12 @@ router.delete('/auth/api/delete-user/:id',  authorize('admin'), deleteUser);
 
 
 // create and get Leads
-router.post('/auth/api/Add-leads',  createLead);
+router.post('/auth/api/Add-leads', Authenticate,  createLead);
 router.get('/auth/api/get-all-leads', getAllLeads);
 router.post("/auth/api/upload-excel-leads",  upload.single("file"), uploadLeadsFromExcel);
+
+// update leads 
+router.patch("/auth/api/get-all-leads/:id",  updateLead);
 
 // get login history
 // router.get('/auth/api/user-login-history', authorize('admin'), getUserLoginHistory);
