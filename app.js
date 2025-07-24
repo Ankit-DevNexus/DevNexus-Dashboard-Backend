@@ -8,6 +8,7 @@ import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+import callbackRoute from './Routes/callbackRoute.js';
 
 const app = express();
 const PORT = process.env.PORT || 1000;
@@ -45,6 +46,10 @@ app.get('/', (req, res)=>{
 })
 // Routes
 app.use('/', Routes);
+
+// Use your route
+app.use("/", callbackRoute);
+
 
 app.listen(PORT, () =>{
     console.log(`Server is listening on http://localhost:${PORT}`);
