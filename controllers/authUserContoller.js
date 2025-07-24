@@ -72,7 +72,7 @@ export const signup = async (req, res) => {
 // Login Controller
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, role } = req.body; // Get role from request
 
     let query = {};
     if (!isNaN(username)) {
@@ -85,6 +85,11 @@ export const login = async (req, res) => {
 
     if (!user || !user.isActive)
       return res.status(400).json({ msg: "Invalid username or account disabled" });
+
+    // Validate role
+    if (role && user.role !== role) {
+      return res.status(403).json({ msg: "Access denied: Role mismatch" });
+    }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(401).json({ msg: "Invalid credentials" });
@@ -115,6 +120,7 @@ export const login = async (req, res) => {
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 };
+
 
 
 export const getAllUsers = async (req, res) => {
