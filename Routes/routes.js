@@ -26,22 +26,22 @@ router.post('/reset-password/:token', resetPassword);
 router.post('/auth/api/signup-users', signup);
 router.get('/auth/api/signin-users', login);
 
-router.get('/auth/api/get-all-users', getAllUsers);
-router.put('/auth/api/update-user/:id',  authorize('admin'), updateUser);
-router.delete('/auth/api/delete-user/:id',  authorize('admin'), deleteUser);
+router.get('/auth/api/get-all-users', Authenticate, getAllUsers);
+router.put('/auth/api/update-user/:id', Authenticate,  authorize('admin'), updateUser);
+router.delete('/auth/api/delete-user/:id', Authenticate,  authorize('admin'), deleteUser);
 
 
 // create and get Leads
 router.post('/auth/api/Add-leads', Authenticate,  createLead);
-router.get('/auth/api/get-all-leads', getAllLeads);
-router.post("/auth/api/upload-excel-leads",  upload.single("file"), uploadLeadsFromExcel);
+router.get('/auth/api/get-all-leads', Authenticate, getAllLeads);
+router.post("/auth/api/upload-excel-leads", Authenticate,  upload.single("file"), uploadLeadsFromExcel);
 
 // update leads 
 router.patch("/auth/api/get-all-leads/:id",  updateLead);
 
 // get login history
 // router.get('/auth/api/user-login-history', authorize('admin'), getUserLoginHistory);
-router.get('/auth/api/user-login-history',  getUserLoginHistory);
+router.get('/auth/api/user-login-history', Authenticate,  getUserLoginHistory);
 
 router.get('/auth/api/meta-ads/fetch-meta-leads',  fetchAndSaveNewLeads);
 
