@@ -32,8 +32,8 @@ const leadSchema = new mongoose.Schema({
     timestamps: true, // adds createdAt and updatedAt fields automatically
 });
 
-const MetaLeadsCollection = mongoose.model("MetaLeadsCollection", leadSchema);
-export default MetaLeadsCollection;
+const MetaLeadsModel = mongoose.model("MetaLeadsCollection", leadSchema);
+export default MetaLeadsModel;
 
 
 
