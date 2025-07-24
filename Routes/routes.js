@@ -65,8 +65,8 @@ router.get('/auth/api/contact', getAllContactSubmissions);
 
 router.post('/auth/api/contact',  contactus);
 
-router.get('/auth/api/webhook', verifyWebhook);
+router.get('/webhook', verifyWebhook);
 
-router.post('/auth/api/webhook', handleFacebookWebhook)
+router.post('/webhook', handleFacebookWebhook)
 
 export default router;
