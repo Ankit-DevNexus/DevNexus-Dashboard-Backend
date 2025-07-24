@@ -24,10 +24,9 @@ const leadSchema = new mongoose.Schema({
     form_id: String,
     page_id: String,
     field_data: Array,
-    created_time: String,
     created_time: {
         type: Date,
-        required: true,
+        default : Date.now,
     },
 }, {
     timestamps: true, // adds createdAt and updatedAt fields automatically
@@ -35,3 +34,7 @@ const leadSchema = new mongoose.Schema({
 
 const MetaLeadsCollection = mongoose.model("MetaLeadsCollection", leadSchema);
 export default MetaLeadsCollection;
+
+
+
+

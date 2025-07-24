@@ -35,7 +35,7 @@ export const handleFacebookWebhook = async (req, res) => {
         const leadRes = await axios.get(`https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`);
         const lead = leadRes.data;
 
-        await MetaLeadsCollection.create({
+        const savedLead = await MetaLeadsCollection.create({
           leadgen_id,
           form_id,
           page_id: pageId,

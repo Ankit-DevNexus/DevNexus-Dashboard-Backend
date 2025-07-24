@@ -8,6 +8,7 @@ import { getUserLoginHistory } from '../controllers/UserLoginHistoryController.j
 import { contactus, getAllContactSubmissions } from '../controllers/ContactUsLeadsController.js';
 import { forgotPassword, resetPassword } from '../controllers/ForgetPasswordController.js';
 import { handleFacebookWebhook, verifyWebhook } from '../controllers/webhookController.js';
+import { exchangeAndStoreFacebookTokens } from '../controllers/exchangeAndStoreFacebookTokensController.js';
 
 const router = express.Router();
 
@@ -68,5 +69,7 @@ router.post('/auth/api/contact',  contactus);
 router.get('/webhook', verifyWebhook);
 
 router.post('/webhook', handleFacebookWebhook)
+
+router.get("/facebook/callback", exchangeAndStoreFacebookTokens);
 
 export default router;
