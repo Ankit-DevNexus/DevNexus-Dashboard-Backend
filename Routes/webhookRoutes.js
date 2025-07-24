@@ -1,10 +1,13 @@
-// routes/webhook.js
-import MetaLeadsCollection from "../models/MetaLeadsModel.js";
+import MetaLeadsModel from "../models/MetaLeadsModel.js";
+
+import express from 'express';
 import TokenModel from "../models/Token.js";
+
+const router = express.Router();
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
-export const verifyWebhook =  (req, res) => {
+router.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
@@ -14,11 +17,11 @@ export const verifyWebhook =  (req, res) => {
   } else {
     return res.sendStatus(403);
   }
-}
+});
 
 
 
-export const handleFacebookWebhook = async (req, res) => {
+router.post("/webhook", async (req, res) => {
   const body = req.body;
 
   if (body.object === "page") {
@@ -35,15 +38,13 @@ export const handleFacebookWebhook = async (req, res) => {
         const leadRes = await axios.get(`https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`);
         const lead = leadRes.data;
 
-        const savedLead = await MetaLeadsModel.create({
+        await MetaLeadsModel.create({
           leadgen_id,
           form_id,
           page_id: pageId,
           field_data: lead.field_data,
           created_time: lead.created_time,
         });
-        console.log("Saved lead:", savedLead);
-
 
         console.log("New lead stored");
       }
@@ -53,6 +54,6 @@ export const handleFacebookWebhook = async (req, res) => {
   } else {
     res.sendStatus(404);
   }
-};
+});
 
-
+export default router;

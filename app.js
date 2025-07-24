@@ -4,10 +4,13 @@ dotenv.config();
 import express from 'express';
 import { getDashboardDB } from './config/ConnectMongoDB.js';
 import Routes from './Routes/routes.js';
+import callback from './Routes/callback.js';
 import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+
+import webhookRoutes from './Routes/webhookRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 1000;
@@ -43,10 +46,11 @@ app.use(session({
 app.get('/', (req, res)=>{
     res.send("API is runnig")
 })
+
 // Routes
 app.use('/', Routes);
-
-
+app.use("/", webhookRoutes);
+app.use("/", callback);
 
 app.listen(PORT, () =>{
     console.log(`Server is listening on http://localhost:${PORT}`);
