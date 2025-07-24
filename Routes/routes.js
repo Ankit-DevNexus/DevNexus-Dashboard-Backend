@@ -7,11 +7,20 @@ import { Authenticate, authorize } from '../middleware/authMiddleware.js';
 import { getUserLoginHistory } from '../controllers/UserLoginHistoryController.js';
 import { contactus, getAllContactSubmissions } from '../controllers/ContactUsLeadsController.js';
 import { forgotPassword, resetPassword } from '../controllers/ForgetPasswordController.js';
-import { verifyWebhook } from '../controllers/webhookController.js';
+import { handleFacebookWebhook, verifyWebhook } from '../controllers/webhookController.js';
 
 const router = express.Router();
 
 router.get('/', DashboardController);
+
+
+const clientId = process.env.APP_ID;
+const redirectUri = process.env.REDIRECT_URI;
+
+router.get("/facebook", (req, res) => {
+  const fbLoginUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=pages_show_list,ads_management,leads_retrieval`;
+  res.redirect(fbLoginUrl);
+});
 
 
 // Apply middleware **before** admin routes
@@ -54,6 +63,8 @@ router.get('/auth/api/contact', getAllContactSubmissions);
 
 router.post('/auth/api/contact',  contactus);
 
-router.get('/webhook', verifyWebhook)
+router.get('/webhook', verifyWebhook);
+
+router.post('/webhook', handleFacebookWebhook)
 
 export default router;
