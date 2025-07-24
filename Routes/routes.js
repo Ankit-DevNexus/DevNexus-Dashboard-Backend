@@ -7,6 +7,7 @@ import { Authenticate, authorize } from '../middleware/authMiddleware.js';
 import { getUserLoginHistory } from '../controllers/UserLoginHistoryController.js';
 import { contactus, getAllContactSubmissions } from '../controllers/ContactUsLeadsController.js';
 import { forgotPassword, resetPassword } from '../controllers/ForgetPasswordController.js';
+import { verifyWebhook } from '../controllers/webhookController.js';
 
 const router = express.Router();
 
@@ -52,5 +53,7 @@ router.get('/auth/api/meta-ads/insights',  getAdsInsights);
 router.get('/auth/api/contact', getAllContactSubmissions);
 
 router.post('/auth/api/contact',  contactus);
+
+router.get('/webhook', verifyWebhook)
 
 export default router;
