@@ -1,5 +1,4 @@
 // routes/webhook.js
-import MetaLeadsCollection from "../models/MetaLeadsModel.js";
 import TokenModel from "../models/Token.js";
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;

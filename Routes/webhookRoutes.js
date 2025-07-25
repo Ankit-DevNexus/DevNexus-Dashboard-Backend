@@ -1,10 +1,9 @@
-import MetaLeadsModel from "../models/MetaLeadsModel.js";
-
 import express from 'express';
+import axios from 'axios';
+import MetaLeadsModel from "../models/MetaLeadsModel.js";
 import TokenModel from "../models/Token.js";
 
 const router = express.Router();
-
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
 router.get("/webhook", (req, res) => {
@@ -19,8 +18,6 @@ router.get("/webhook", (req, res) => {
   }
 });
 
-
-
 router.post("/webhook", async (req, res) => {
   const body = req.body;
 
@@ -29,24 +26,43 @@ router.post("/webhook", async (req, res) => {
       const { id: pageId, changes } = entry;
 
       for (const change of changes) {
+        if (!change.value || !change.value.leadgen_id) {
+          console.warn("Missing leadgen_id in change:", change.value);
+          continue;
+        }
+
         const leadgen_id = change.value.leadgen_id;
         const form_id = change.value.form_id;
 
         const tokenData = await TokenModel.findOne({ page_id: pageId });
-        if (!tokenData) return;
+        if (!tokenData) {
+          console.error("Token not found for page:", pageId);
+          continue;
+        }
 
-        const leadRes = await axios.get(`https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`);
-        const lead = leadRes.data;
+        const url = `https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`;
+        console.log("Fetching lead from:", url);
 
-        await MetaLeadsModel.create({
-          leadgen_id,
-          form_id,
-          page_id: pageId,
-          field_data: lead.field_data,
-          created_time: lead.created_time,
-        });
+        try {
+          const leadRes = await axios.get(url);
+          const lead = leadRes.data;
 
-        console.log("New lead stored");
+          await MetaLeadsModel.create({
+            leadgen_id,
+            form_id,
+            page_id: pageId,
+            field_data: lead.field_data,
+            created_time: lead.created_time,
+          });
+
+          console.log("New lead saved");
+        } catch (err) {
+          console.error("Error fetching lead data:", {
+            message: err.message,
+            status: err.response?.status,
+            data: err.response?.data,
+          });
+        }
       }
     }
 
