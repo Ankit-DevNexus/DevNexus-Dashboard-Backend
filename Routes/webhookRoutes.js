@@ -4,17 +4,22 @@ import MetaLeadsModel from "../models/MetaLeadsModel.js";
 import TokenModel from "../models/Token.js";
 
 const router = express.Router();
-const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+// const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "mywebhooktoken";
 
+
+// Facebook verification
 router.get("/webhook", (req, res) => {
+  const VERIFY_TOKEN = "mywebhooktoken"; // Set this same value in Meta
+
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
-  if (mode && token === VERIFY_TOKEN) {
-    return res.status(200).send(challenge);
+  if (mode === "subscribe" && token === VERIFY_TOKEN) {
+    console.log("Webhook verified");
+    res.status(200).send(challenge);
   } else {
-    return res.sendStatus(403);
+    res.sendStatus(403);
   }
 });
 
