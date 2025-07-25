@@ -47,6 +47,7 @@ router.post("/webhook", async (req, res) => {
         }
 
         const url = `https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`;
+        
         console.log("Fetching lead from:", url);
 
         try {
