@@ -13,7 +13,7 @@ import cors from 'cors';
 import webhookRoutes from './Routes/webhookRoutes.js'
 
 const app = express();
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 3000;
 const DASHBOARD_DB_URI = process.env.DASHBOARD_DB_URI;
 
 // Define __dirname for ES Module
@@ -49,8 +49,8 @@ app.get('/', (req, res)=>{
 
 // Routes
 app.use('/', Routes);
-app.use("/", webhookRoutes);
-app.use("/", callback);
+app.use('/', webhookRoutes);
+app.use('/', callback);
 
 app.listen(PORT, () =>{
     console.log(`Server is listening on http://localhost:${PORT}`);
