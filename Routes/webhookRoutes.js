@@ -22,12 +22,18 @@ router.post("/webhook", async (req, res) => {
   const body = req.body;
 
   if (body.object === "page") {
-    for (const entry of body.entry) {
-      const { id: pageId, changes } = entry;
+    for (const entry of body.entry || []) {
+      const pageId = entry.id;
+      const changes = entry.changes;
+
+      if (!Array.isArray(changes)) {
+        console.warn("Invalid or missing 'changes' in entry:", entry);
+        continue;
+      }
 
       for (const change of changes) {
-        if (!change.value || !change.value.leadgen_id) {
-          console.warn("Missing leadgen_id in change:", change.value);
+        if (!change?.value?.leadgen_id) {
+          console.warn("Missing leadgen_id in change:", change);
           continue;
         }
 
@@ -66,10 +72,11 @@ router.post("/webhook", async (req, res) => {
       }
     }
 
-    res.status(200).send("EVENT_RECEIVED");
+    return res.status(200).send("EVENT_RECEIVED");
   } else {
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 });
+
 
 export default router;
