@@ -18,6 +18,12 @@ router.get("/facebook/callback", async (req, res) => {
     },
   });
 
+  console.log("code:", code);
+  console.log("APP_ID:", APP_ID);
+  console.log("APP_SECRET:", APP_SECRET ? "present" : "missing");
+  console.log("REDIRECT_URI:", REDIRECT_URI);
+
+
   const shortToken = shortTokenRes.data.access_token;
 
   // Exchange for long-lived token
