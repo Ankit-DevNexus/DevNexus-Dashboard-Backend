@@ -57,6 +57,7 @@ router.get("/facebook/callback", async (req, res) => {
     }
 
     res.send("Tokens and pages stored");
+    
   } catch (err) {
     console.error("Error in /facebook/callback:", err.response?.data || err.message);
     res.status(500).send("Something went wrong during token processing.");
