@@ -4,13 +4,12 @@ dotenv.config();
 import express from 'express';
 import { getDashboardDB } from './config/ConnectMongoDB.js';
 import Routes from './Routes/routes.js';
-import callback from './Routes/Callback.js';
 import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
-
 import webhookRoutes from './Routes/webhookRoutes.js'
+import callback from './Routes/Callback_temp.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -46,6 +45,7 @@ app.use(session({
 app.get('/', (req, res)=>{
     res.send("API is runnig")
 })
+
 
 // Routes
 app.use('/', Routes);
