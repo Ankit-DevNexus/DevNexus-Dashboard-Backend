@@ -62,6 +62,8 @@ router.get("/facebook/callback", async (req, res) => {
 });
 
 
+export default router;
+
 // // routes/callback.js
 // import express from "express";
 // import axios from "axios";
