@@ -3,7 +3,9 @@ import axios from "axios";
 import TokenModel from "../models/Token.js";
 const router = express.Router();
 
-const { APP_ID, APP_SECRET, REDIRECT_URI } = process.env;
+APP_ID = process.env.APP_ID;
+APP_SECRET = process.env.APP_SECRET;
+REDIRECT_URI = process.env.REDIRECT_URI;
 
 router.get("/facebook/callback", async (req, res) => {
   try {
