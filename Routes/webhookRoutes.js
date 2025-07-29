@@ -24,6 +24,8 @@ router.get("/webhook", (req, res) => {
 });
 
 router.post("/webhook", async (req, res) => {
+    console.log("Webhook POST received:", JSON.stringify(req.body, null, 2));
+
   const body = req.body;
 
   if (body.object === "page") {
@@ -83,6 +85,9 @@ router.post("/webhook", async (req, res) => {
     return res.sendStatus(404);
   }
 });
+
+
+
 
 // router.post('/webhook', async (req, res) => {
 //   const body = req.body;

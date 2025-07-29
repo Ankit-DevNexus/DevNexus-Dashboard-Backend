@@ -12,4 +12,4 @@ cron.schedule('*/10 * * * *', async () => {
   }
 });
 
-console.log('✅ Cron job initialized to sync leads every 10 minutes');
+console.log('Cron job initialized to sync leads every 10 minutes');
