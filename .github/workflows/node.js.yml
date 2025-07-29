@@ -41,4 +41,8 @@ jobs:
         echo "ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}" >> .env
         echo "ADMIN_MAIL2=${{ secrets.ADMIN_MAIL2 }}" >> .env
         echo "USER_MAIL=${{ secrets.USER_MAIL }}" >> .env
+        echo "APP_ID=${{ secrets.APP_ID }}" >> .env
+        echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
+        echo "VERIFY_TOKEN=${{ secrets.VERIFY_TOKEN }}" >> .env
+        echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> .env
     - run: cat .env  # Optional: Check if the file contains correct values (For debugging)
