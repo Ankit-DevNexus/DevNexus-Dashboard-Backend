@@ -73,7 +73,7 @@ router.get("/facebook/callback", async (req, res) => {
           },
         });
 
-        console.log(`Subscribed to leadgen for page: ${page.name} (${page.id})`);
+        console.log(`Subscribed to leadgen for page: ${page.name} , Page id: (${page.id})`);
       } catch (subscribeErr) {
         console.error(`Failed to subscribe ${page.name}:`, subscribeErr.response?.data || subscribeErr.message);
       }
