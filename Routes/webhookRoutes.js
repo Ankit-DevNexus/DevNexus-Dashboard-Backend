@@ -86,6 +86,17 @@ router.post("/webhook", async (req, res) => {
   }
 });
 
+router.get("/leads-by-webhook", async (req, res) => {
+  try {
+    const leads = await MetaLeadsModel.find().sort({ created_time: -1 }); // newest first
+    res.json(leads);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch leads" });
+  }
+});
+
+
+export default router;
 
 
 
@@ -113,4 +124,4 @@ router.post("/webhook", async (req, res) => {
 // });
 
 
-export default router;
+// export default router;
