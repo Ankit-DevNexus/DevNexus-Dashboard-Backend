@@ -61,6 +61,12 @@ router.post("/webhook", async (req, res) => {
           const leadRes = await axios.get(url);
           const lead = leadRes.data;
 
+          
+          const adId = lead.ad_id; // May or may not be present
+
+          console.log("AdId: ", adId);
+          
+
           await MetaLeadsModel.create({
             leadgen_id,
             form_id,
