@@ -4,6 +4,7 @@ const leadSchema = new mongoose.Schema({
     leadgen_id: String,
     form_id: String,
     page_id: String,
+    campaign_name: String,
     field_data: Array,
     created_time: {
         type: Date,

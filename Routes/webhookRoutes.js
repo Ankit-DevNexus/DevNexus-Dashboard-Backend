@@ -24,7 +24,7 @@ router.get("/webhook", (req, res) => {
 });
 
 router.post("/webhook", async (req, res) => {
-    console.log("Webhook POST received:", JSON.stringify(req.body, null, 2));
+  console.log("Webhook POST received:", JSON.stringify(req.body, null, 2));
 
   const body = req.body;
 
@@ -54,23 +54,31 @@ router.post("/webhook", async (req, res) => {
         }
 
         const url = `https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`;
-        
+
         console.log("Fetching lead from:", url);
 
+        let campaignName = null;
+
         try {
-          const leadRes = await axios.get(url);
+          const leadRes = await axios.get(`https://graph.facebook.com/v19.0/${leadgen_id}?access_token=${tokenData.page_access_token}`);
           const lead = leadRes.data;
 
-          
-          const adId = lead.ad_id; // May or may not be present
+          // Step 1: Try to get ad_id
+          if (lead.ad_id) {
+            const adDetails = await axios.get(`https://graph.facebook.com/v19.0/${lead.ad_id}?fields=campaign_id&access_token=${tokenData.page_access_token}`);
+            const campaignId = adDetails.data.campaign_id;
 
-          console.log("AdId: ", adId);
-          
+            // Step 2: Get campaign name
+            const campaignRes = await axios.get(`https://graph.facebook.com/v19.0/${campaignId}?fields=name&access_token=${tokenData.page_access_token}`);
+            campaignName = campaignRes.data.name;
+          }
 
+          // Step 3: Save lead with campaign name
           await MetaLeadsModel.create({
             leadgen_id,
             form_id,
             page_id: pageId,
+            campaign_name: campaignName,
             field_data: lead.field_data,
             created_time: lead.created_time,
           });
